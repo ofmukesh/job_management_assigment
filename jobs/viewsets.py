@@ -17,9 +17,14 @@ class JobViewSet(viewsets.ModelViewSet):
     }
 
     def get_permissions(self):
-        if self.action == 'create':
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -30,3 +35,8 @@ class JobViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def list(self, request, *args, **kwargs):
+        # Reset queryset to avoid getting duplicates
+        self.queryset = Job.objects.all()
+        return super().list(request, *args, **kwargs)

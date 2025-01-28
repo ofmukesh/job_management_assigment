@@ -29,24 +29,23 @@ class FreelancerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        try:
-            user_data = {
-                'username': request.data.get('email'),
+        data = {
+            'user': {
+                'first_name': request.data.get('name'),
                 'email': request.data.get('email'),
-                'password': request.data.get('password')
-            }
-            user = User.objects.create_user(**user_data)
+                'password': request.data.get('password'),
+                'username': request.data.get('email')
+            },
+            'skills': request.data.get('skills')
+        }
+        
+        serializer = self.get_serializer(data=data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         except IntegrityError:
             return Response({'error': 'User already exists'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-        freelancer_data = {
-            'user': user.id,
-            'skills': request.data.get('skills')
-        }
-        serializer = self.get_serializer(data=freelancer_data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
