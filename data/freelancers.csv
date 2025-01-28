@@ -1,0 +1,6 @@
+name,email,skills
+John Smith,john.smith@email.com,"Python, Django, JavaScript"
+Sarah Wilson,sarah.w@email.com,"React, Node.js, UI/UX"
+Mike Johnson,mike.j@email.com,"Java, Spring, SQL"
+Emma Davis,emma.d@email.com,"Python, Data Science, Machine Learning"
+Alex Brown,alex.b@email.com,"PHP, Laravel, MySQL"

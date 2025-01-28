@@ -40,4 +40,15 @@ clean:
 	find . -name "*.pyc" -exec rm -f {} \;
 	find . -name "__pycache__" -exec rm -rf {} \;
 
-.PHONY: all seed install run migrate createadmin collectstatic test clean
+.PHONY: all seed install run migrate createadmin collectstatic test clean import-all import-freelancers import-jobs import-applications
+
+import-all: import-freelancers import-jobs import-applications
+
+import-freelancers:
+	python manage.py import_freelancers data/freelancers.csv
+
+import-jobs:
+	python manage.py import_jobs data/jobs.csv
+
+import-applications:
+	python manage.py import_applications data/applications.csv

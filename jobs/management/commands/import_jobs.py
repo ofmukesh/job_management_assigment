@@ -15,6 +15,7 @@ class Command(BaseCommand):
             for row in reader:
                 Job.objects.create(
                     title=row['title'],
-                    description=row['description']
+                    description=row['description'],
+                    required_skills=row['required_skills']
                 )
         self.stdout.write(self.style.SUCCESS('Successfully imported jobs'))

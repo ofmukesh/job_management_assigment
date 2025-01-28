@@ -1,5 +1,6 @@
 import csv
 from django.core.management.base import BaseCommand
+from django.contrib.auth.models import User
 from freelancer.models import Freelancer
 
 
@@ -15,9 +16,17 @@ class Command(BaseCommand):
         with open(csv_file, newline='') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                Freelancer.objects.create(
-                    name=row['name'],
-                    email=row['email']
+                # Create user first
+                username = row['email'].split('@')[0]  # Use email prefix as username
+                user = User.objects.create_user(
+                    username=username,
+                    email=row['email'],
+                    first_name=row['name'].split()[0],
+                    last_name=' '.join(row['name'].split()[1:]) if len(row['name'].split()) > 1 else ''
                 )
-        self.stdout.write(self.style.SUCCESS(
-            'Successfully imported freelancers'))
+                # Create freelancer profile
+                Freelancer.objects.create(
+                    user=user,
+                    skills=row['skills']
+                )
+        self.stdout.write(self.style.SUCCESS('Successfully imported freelancers'))
