@@ -12,4 +12,4 @@ class Application(models.Model):
     applied_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.freelancer.full_name} - {self.job.title} - {self.status}"
+        return f"{self.freelancer.user.first_name} - {self.job.title} - {self.status}"

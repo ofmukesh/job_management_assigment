@@ -1,15 +1,25 @@
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Job
 from .serializers import JobSerializer
 from django.core.exceptions import ValidationError
-from rest_framework.response import Response
-from rest_framework import status
+
 
 class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = {
+        'required_skills': ['icontains']
+    }
+
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = [IsAdminUser]
+        return super().get_permissions()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
