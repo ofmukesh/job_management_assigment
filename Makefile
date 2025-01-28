@@ -32,9 +32,12 @@ collectstatic:
 test:
 	$(DJANGO_MANAGE) test
 
+seed:
+	$(DJANGO_MANAGE) seed
+
 # Clean up __pycache__ and .pyc files
 clean:
 	find . -name "*.pyc" -exec rm -f {} \;
 	find . -name "__pycache__" -exec rm -rf {} \;
 
-.PHONY: all install run migrate createadmin collectstatic test clean
+.PHONY: all seed install run migrate createadmin collectstatic test clean

@@ -18,49 +18,50 @@ This project is a Django-based application for managing freelancers and their sk
    cd job_management_assignment
    ```
 
-2. **Create and activate a virtual environment:**
+2. **Set up the environment and install dependencies:**
 
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate
+   make install
    ```
 
-3. **Install the required packages:**
+3. **Set up the database:**
 
    ```bash
-   pip install -r requirements.txt
+   make migrate
    ```
 
-4. **Set up the database:**
-
-   - Update the `DATABASES` setting in `settings.py` with your database configuration.
-   - Apply the migrations:
+4. **Create a superuser:**
 
    ```bash
-   python manage.py migrate
+   make createadmin
    ```
 
-5. **Create a superuser:**
+5. **Run the development server:**
 
    ```bash
-   python manage.py createsuperuser
+   make run
    ```
 
-6. **Run the development server:**
-
-   ```bash
-   python manage.py runserver
-   ```
-
-7. **Access the application:**
+6. **Access the application:**
    Open your web browser and go to `http://127.0.0.1:8000/`.
+
+## Available Make Commands
+
+- `make install`: Set up virtual environment and install dependencies
+- `make run`: Start the Django development server
+- `make migrate`: Apply database migrations
+- `make createadmin`: Create a superuser account
+- `make collectstatic`: Collect static files
+- `make test`: Run the test suite
+- `make seed`: Seed the database with initial data
+- `make clean`: Remove Python cache files
 
 ## Running Tests
 
-To run the tests, use the following command:
+To run the tests, use:
 
 ```bash
-python manage.py test
+make test
 ```
 
 ## API Endpoints
